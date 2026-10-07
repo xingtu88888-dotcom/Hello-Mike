@@ -1,0 +1,53 @@
+name: Build Stage4 Windows Installer
+
+on:
+  push:
+    branches:
+      - build-stage4-installer-test
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        shell: pwsh
+        run: npm install --no-audit --no-fund
+
+      - name: Syntax check
+        shell: pwsh
+        run: |
+          node --check src/main.js
+          node --check src/renderer.js
+          node --check src/guest-preload.js
+          node --check src/preload.js
+
+      - name: Build NSIS installer
+        shell: pwsh
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: npx electron-builder --win nsis --x64 --publish never
+
+      - name: Show outputs
+        shell: pwsh
+        run: Get-ChildItem dist -Recurse | Select-Object FullName,Length
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: Hello-Mike-Stage4-Installer
+          path: |
+            dist/Hello-Mike-Setup-0.13.4.exe
+            dist/latest.yml
+          if-no-files-found: error
+          retention-days: 7
