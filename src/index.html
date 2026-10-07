@@ -1,0 +1,189 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hello Mike</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="updates.css"></head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+  <div class="brand"><img src="../build/icon.png" alt="Hello Mike"><div><strong>Hello Mike</strong><span id="hmAppVersion">PRIVATE DESK &middot; v0.13.0</span></div></div>
+  <nav>
+    <button class="nav active" data-page="dashboard"><span>⌂</span>工作台</button>
+    <button class="nav" data-page="chat"><span>◉</span>聊天工作台</button>
+    <button class="nav" data-page="accounts"><span>◫</span>账号管理</button>
+    <button class="nav" data-page="proxy"><span>◎</span>代理 / IP</button>
+    <button class="nav" data-page="translator"><span>文</span>翻译中心</button>
+    <button class="nav" data-page="phrases"><span>✦</span>快捷话术</button>
+    <button class="nav" data-page="settings"><span>🛡</span>账号安全</button>
+    <button class="nav" data-page="updates"><span>&#8635;</span>&#36719;&#20214;&#26356;&#26032;</button>
+  </nav>
+  <button id="hmUpdateBadge" class="secondary" hidden></button>
+  <div class="privacy"><b>● 本地隐私模式</b><span id="securityStatus">正在检查安全存储…</span><small>账号会话与代理凭据保存在本机</small></div>
+</aside>
+<section class="content">
+<header><div><p class="eyebrow">HELLO MIKE CONTROL CENTER</p><h1 id="pageTitle">工作台</h1><p id="pageSub">集中管理聊天账号、独立网络与翻译工作流</p></div><div class="headerActions"><div class="clock"><span class="dot"></span><span id="currentLocalUser">未登录</span></div><button id="logoutLocalUser" class="secondary" style="display:none">退出用户</button><button id="addBtn">＋ 添加账号</button></div></header>
+
+<main>
+<section id="dashboardPage" class="page active">
+  <div class="hero"><div><span class="heroTag">PRIVATE MULTI-ACCOUNT WORKSPACE</span><h2>所有聊天账号，<br><em>一个工作台。</em></h2><p>独立会话、独立代理、实时翻译与中文防误发。数据优先留在你的电脑。</p><div class="heroBtns"><button id="heroAdd">＋ 添加第一个账号</button><button class="ghost" id="goTranslate">打开翻译中心 →</button></div></div><div class="orb"><img src="../build/icon.png" alt="logo"><span>HELLO<br>MIKE</span></div></div>
+  <div class="stats"><div class="stat"><span>运行账号</span><b id="statAccounts">0</b><small>已配置账号</small></div><div class="stat"><span>独立代理</span><b id="statProxy">0</b><small>已启用网络隔离</small></div><div class="stat"><span>中文防误发</span><b id="statGuard">0</b><small>受保护账号</small></div><div class="stat"><span>安全存储</span><b class="smallValue" id="statSecure">检查中</b><small>Windows 本机加密</small></div></div>
+  <div class="sectionHead"><div><p class="eyebrow">QUICK ACCESS</p><h2>账号快捷入口</h2></div><button class="textBtn" id="manageAccounts">管理全部账号 →</button></div>
+  <div id="dashboardProfiles" class="accountGrid"></div>
+  <div class="platforms"><div><p class="eyebrow">PLATFORM ROADMAP</p><h3>多平台工作区</h3><span>当前优先支持 WhatsApp 与 LINE，其他平台保留扩展入口。</span></div><div class="platformRow"><i class="wa">W</i><i class="line">L</i><i>T</i><i>S</i><i>M</i><i>IG</i></div></div>
+</section>
+
+<section id="chatPage" class="page chatPage">
+  <div class="chatShell">
+    <aside class="chatRail">
+      <div class="chatRailHead"><div><p class="eyebrow">LIVE ACCOUNTS</p><h3>聊天账号</h3></div><button id="chatAddBtn" class="miniAdd">＋</button></div>
+      <div class="dragHint">拖动账号卡片可调整顺序</div><div id="chatAccountList" class="chatAccountList"></div>
+      <div class="memoryNote"><b>稳定模式</b><span>账号页面按需创建，但创建后不再自动销毁；仅在明确崩溃时重建，避免会话反复失效。</span></div>
+    </aside>
+    <section class="chatStageWrap">
+      <div class="chatToolbar">
+        <div class="chatIdentity"><span id="chatServiceDot" class="serviceDot"></span><div><b id="chatActiveName">未选择账号</b><small id="chatRoute">请选择左侧账号开始</small></div></div>
+        <div class="chatTools"><button id="markAllRead" class="secondary accentSoft">✓ 全部已读</button><button id="chatNoteBtn" class="secondary accentSoft">📝 当前备注</button><button id="broadcastBtn" class="secondary accentSoft">↗ 群发助手</button><button id="stopBroadcastRun" class="secondary dangerSoft" style="display:none">■ 停止群发</button><button id="chatReload" class="secondary">刷新</button><button id="chatHibernate" class="secondary">休眠当前</button><button id="chatEdit" class="secondary">账号设置</button><button id="exitChatFocus" class="secondary">返回工作台</button></div>
+      </div>
+      <div id="chatStage" class="chatStage">
+        <div id="chatEmpty" class="chatEmpty"><div class="emptyLogo"><img src="../build/icon.png" alt="Hello Mike"></div><h2>选择一个聊天账号</h2><p>WhatsApp 将直接显示在 Hello Mike 内，不再弹出独立窗口。</p></div>
+        <div id="chatStatusOverlay" class="chatStatusOverlay hidden"><div class="loader"></div><b id="chatStatusTitle">正在加载 WhatsApp…</b><span id="chatStatusText"></span><button type="button" id="chatStatusCancelBroadcast" class="statusCancelBtn" style="display:none">停止群发</button></div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<section id="accountsPage" class="page"><div class="sectionHead"><div><p class="eyebrow">ACCOUNT CENTER</p><h2>账号管理</h2><p>每个账号拥有独立会话、翻译方向与网络配置。</p></div><button id="addBtn2">＋ 添加账号</button></div><div id="profiles"></div><div class="infoBar">ⓘ WhatsApp 使用独立 Electron 会话；LINE 使用独立 Chrome 用户目录。网络代理仅用于正常出口隔离。</div></section>
+
+<section id="proxyPage" class="page"><div class="sectionHead"><div><p class="eyebrow">NETWORK ISOLATION</p><h2>代理 / IP 中心</h2><p>查看每个账号的网络出口与代理健康状态。</p></div></div><div id="proxyProfiles" class="accountGrid"></div></section>
+
+<section id="translatorPage" class="page"><div class="translatorLayout"><div class="translateMain"><p class="eyebrow">GOOGLE TRANSLATION CENTER</p><h2>Google 翻译中心</h2><div class="row"><select id="presetProfile"><option value="">选择账号…</option></select><button id="savePreset" class="secondary nowrap">保存语言预设</button></div><div id="activeHint" class="note">聊天内采用纯手动翻译：打开聊天时不会请求任何翻译。每条文字下方直接显示“翻译”，只有点击该句后才调用翻译服务。</div><div class="note">只使用 Google 翻译，不接入收费翻译，也不会自动切换到其他翻译平台。</div><div class="row langs"><select id="source"><option value="AUTO">自动识别</option><option value="ZH">中文（简体）</option><option value="EN">英语</option><option value="IT">意大利语</option><option value="JA">日语</option><option value="KO">韩语</option></select><button id="swapLang" class="secondary compact">⇄</button><select id="target"><option value="ZH">中文（简体）</option><option value="IT">意大利语</option><option value="EN">英语</option><option value="JA">日语</option><option value="KO">韩语</option></select></div><textarea id="src" placeholder="输入需要翻译的内容…"></textarea><div class="actions"><button id="translateBtn">立即翻译</button><button id="copyBtn" class="secondary">复制译文</button><button id="clearTranslate" class="secondary">清空</button></div><textarea id="dst" placeholder="翻译结果" readonly></textarea><div id="status"></div></div><aside class="translateSide"><div class="miniCard"><b>聊天内翻译</b><span>双方每条文字消息下方都有“翻译 / 收起翻译”开关。默认采用手动翻译，不会在打开聊天时自动请求历史消息；需要哪一句就点击哪一句。</span></div><div class="miniCard"><b>Google 翻译</b><span>只使用 Google 翻译。聊天内只有你主动点击“翻译”后才发起请求；失败时直接提示重试，不切换其他平台。</span></div></aside></div></section>
+<section id="phrasesPage" class="page"><div class="emptyFeature"><span>✦</span><h2>快捷话术</h2><p>这个模块已预留给下一阶段：常用回复、客户标签话术和一键翻译发送。</p><b>COMING NEXT</b></div></section>
+<section id="settingsPage" class="page">
+  <div class="sectionHead"><div><p class="eyebrow">ACCOUNT SECURITY CENTER</p><h2>账号安全中心</h2><p>本地用户隔离、独立会话空间、网络一致性检查与安全存储状态。</p></div><button id="runSecurityScan">运行安全扫描</button></div>
+  <div class="securityGrid">
+    <div class="securityCard"><span>当前本地用户</span><b id="securityCurrentUser">—</b><small>不同 Hello Mike 用户的数据与 WhatsApp 会话互相隔离</small></div>
+    <div class="securityCard"><span>系统安全存储</span><b id="securityEncryption">检查中</b><small>代理密码等敏感凭据使用系统安全存储</small></div>
+    <div class="securityCard"><span>会话隔离</span><b>已启用</b><small>每个用户、每个聊天账号使用独立持久化 Session</small></div>
+    <div class="securityCard"><span>风险控制</span><b>稳定优先</b><small>不伪造设备、不绕过平台风控；减少因串会话、串代理造成的异常</small></div>
+  </div>
+  <div class="securityPanel"><div class="securityPanelHead"><div><h3>本地用户</h3><p>分享同一台电脑时，每个用户只能看到自己的账号、备注、代理与会话。</p></div><button id="addLocalUser" class="secondary">＋ 新建本地用户</button></div><div id="localUserList" class="securityList"></div></div>
+  <div class="securityPanel"><div class="securityPanelHead"><div><h3>修改当前账号 / 密码</h3><p>修改 Hello Mike 本地登录信息，不影响 WhatsApp Session。</p></div></div><div class="credentialGrid"><input id="changeUsername" placeholder="新用户名（不改可保留当前）"><input id="currentLoginPassword" type="password" placeholder="当前密码"><input id="newLoginPassword" type="password" placeholder="新密码（不修改请留空）"><input id="newLoginConfirm" type="password" placeholder="确认新密码"><button id="saveCredentials">保存修改</button></div></div>
+  <div class="securityPanel"><div class="securityPanelHead"><div><h3>恢复密钥</h3><p>忘记密码时可在登录页面使用恢复密钥重置密码。</p></div><button id="rotateRecoveryKey" class="secondary">重新生成恢复密钥</button></div><div class="credentialGrid"><input id="recoveryCurrentPassword" type="password" placeholder="输入当前密码以重新生成"><div class="helper" style="grid-column:1/-1">重新生成后，旧恢复密钥立即失效。</div></div></div>
+  <div class="securityPanel"><div class="securityPanelHead"><div><h3>账号网络一致性</h3><p>检查代理配置与当前出口 IP。与上一次扫描不同会标记“网络已变化”，用于提醒异常切换。</p></div></div><div id="securityScanResults" class="securityList"><div class="securityEmpty">尚未运行安全扫描。</div></div></div>
+  <div class="infoBar">ⓘ 账号安全中心用于隔离本地数据、保持登录环境稳定并提醒网络变化；它不能保证 WhatsApp 永不封号，也不会尝试绕过平台风控。</div>
+</section>
+
+<section id="updatesPage" class="page">
+  <div class="sectionHead"><div><p class="eyebrow">HELLO MIKE UPDATES</p><h2>&#36719;&#20214;&#26356;&#26032;</h2></div></div>
+  <div class="hmUpdateCard">
+    <dl class="hmUpdateVersions">
+      <div><dt>Hello Mike</dt><dd id="hmUpdateApp">--</dd></div>
+      <div><dt>Electron</dt><dd id="hmUpdateElectron">--</dd></div>
+      <div><dt>Chromium</dt><dd id="hmUpdateChromium">--</dd></div>
+    </dl>
+    <p id="hmUpdateStatus" role="status" aria-live="polite"></p>
+    <p id="hmUpdateDetail" class="note"></p>
+    <progress id="hmUpdateProgress" max="100" value="0" hidden></progress>
+    <p id="hmUpdateProgressText" class="note"></p>
+    <pre id="hmUpdateNotes" hidden></pre>
+    <div class="hmUpdateActions">
+      <button id="hmCheckUpdate" type="button" disabled>&#26816;&#26597;&#26356;&#26032;</button>
+      <button id="hmDownloadUpdate" type="button" hidden>&#19979;&#36733;&#26356;&#26032;</button>
+      <button id="hmInstallUpdate" type="button" hidden>&#37325;&#21551;&#24182;&#23433;&#35013;</button>
+    </div>
+    <p class="note" id="hmUpdatePolicy"></p>
+  </div>
+</section>
+
+</main>
+</section></div>
+
+<div id="authGate" class="authGate open" aria-hidden="false">
+  <section class="authCard">
+    <div class="authBrand"><img src="../build/icon.png" alt="Hello Mike"><div><p class="eyebrow">PRIVATE LOCAL ACCOUNT</p><h2>Hello Mike</h2></div></div>
+    <p id="authLead">登录你的本地工作空间。每个用户的 WhatsApp 会话、账号配置、备注和代理互不干扰。</p>
+    <label>用户名<input id="authUsername" autocomplete="username" placeholder="例如：Mike"></label>
+    <label>密码<input id="authPassword" type="password" autocomplete="current-password" placeholder="至少 8 位"></label><label class="rememberLine"><input id="rememberLogin" type="checkbox"> 记住账号和密码（使用 Windows 安全存储加密）</label>
+    <label id="authConfirmWrap" style="display:none">确认密码<input id="authConfirm" type="password" autocomplete="new-password" placeholder="再次输入密码"></label>
+    <div id="authError" class="authError"></div>
+    <button id="authPrimary">登录</button>
+    <button id="authSwitch" class="secondary">注册新用户</button>
+    <div id="authRecoveryActions" class="authInlineActions"><button id="authChangePassword" class="linkButton" type="button">修改密码</button><span>·</span><button id="authForgotPassword" class="linkButton" type="button">忘记密码</button></div>
+    <small id="authHint">首次使用时请先注册本机管理员。该账号只保存在这台电脑上。</small>
+  </section>
+</div>
+<div id="passwordDlg" class="modalOverlay" aria-hidden="true"><section class="accountModal smallModal"><div class="accountModalHead"><div><p class="eyebrow">LOCAL PASSWORD</p><h2 id="passwordDlgTitle">修改密码</h2></div><button type="button" id="closePasswordDlg" class="iconClose">×</button></div><div class="accountModalBody"><div class="formRow single"><label>用户名<input id="passwordDlgUsername" autocomplete="username" placeholder="你的 Hello Mike 用户名"></label></div><div id="currentPasswordWrap" class="formRow single"><label>当前密码<input id="passwordDlgCurrent" type="password" autocomplete="current-password" placeholder="当前密码"></label></div><div id="recoveryKeyWrap" class="formRow single" style="display:none"><label>恢复密钥<input id="passwordDlgRecovery" autocomplete="off" placeholder="例如 HM-XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX"></label></div><div class="formRow"><label>新密码<input id="passwordDlgNew" type="password" autocomplete="new-password" placeholder="至少 8 位"></label><label>确认新密码<input id="passwordDlgConfirm" type="password" autocomplete="new-password" placeholder="再次输入"></label></div><div id="passwordDlgHint" class="helper">知道当前密码时，可直接在登录页面修改。</div><div id="passwordDlgError" class="authError"></div></div><div class="accountModalFoot"><button id="cancelPasswordDlg" class="secondary">取消</button><button id="savePasswordDlg">保存新密码</button></div></section></div>
+<div id="recoveryKeyDlg" class="modalOverlay" aria-hidden="true"><section class="accountModal smallModal"><div class="accountModalHead"><div><p class="eyebrow">RECOVERY KEY</p><h2>请保存恢复密钥</h2></div></div><div class="accountModalBody"><p class="recoveryExplain">这是忘记本机登录密码时的唯一恢复凭证。Hello Mike 不会通过短信或邮箱找回密码。</p><div id="recoveryKeyValue" class="recoveryKeyBox"></div><div class="helper orange">请立即复制并保存在安全位置。出于安全原因，关闭后不会再次显示原密钥。</div></div><div class="accountModalFoot"><button id="copyRecoveryKey" class="secondary">复制恢复密钥</button><button id="confirmRecoverySaved">我已保存</button></div></section></div>
+<div id="localUserDlg" class="modalOverlay" aria-hidden="true"><section class="accountModal smallModal"><div class="accountModalHead"><div><p class="eyebrow">LOCAL USER</p><h2>新建本地用户</h2></div><button type="button" id="closeLocalUserDlg" class="iconClose">×</button></div><div class="accountModalBody"><div class="formRow single"><label>用户名<input id="newLocalUsername" autocomplete="off" placeholder="例如：朋友A"></label></div><div class="formRow"><label>密码<input id="newLocalPassword" type="password" placeholder="至少 8 位"></label><label>确认密码<input id="newLocalConfirm" type="password" placeholder="再次输入"></label></div><div class="helper">本地用户之间完全隔离。新用户首次进入时不会看到当前用户的 WhatsApp 账号。</div></div><div class="accountModalFoot"><button id="cancelLocalUser" class="secondary">取消</button><button id="saveLocalUser">创建用户</button></div></section></div>
+<div id="dlg" class="modalOverlay" aria-hidden="true">
+  <section class="accountModal" role="dialog" aria-modal="true" aria-labelledby="accountModalTitle">
+    <div class="accountModalHead"><div><p class="eyebrow">WHATSAPP ACCOUNT PROFILE</p><h2 id="accountModalTitle">新增 WhatsApp</h2></div><button type="button" id="closeDlg" class="iconClose">×</button></div>
+    <div class="accountModalBody">
+      <input type="hidden" id="id">
+      <div class="formRow single"><label>名称<input id="name" autocomplete="off" placeholder="例如：WhatsApp-客服01"></label></div>
+      <div class="helper orange">名称可以自由填写，用于区分不同客户账号。</div>
+      <div class="formRow"><label>服务<select id="service"><option value="whatsapp">WhatsApp Web</option><option value="line">LINE（独立 Chrome）</option><option value="custom">自定义网页</option></select></label><label id="urlLabel">网址<input id="url" autocomplete="off" placeholder="https://..."></label></div>
+
+      <div class="modalDivider"></div>
+      <div class="settingGrid">
+        <div class="settingLabel">聊天内翻译模式</div><div class="note" style="grid-column:2">手动：点击某句话下方的“翻译”后才请求译文</div>
+        <input id="sendTranslate" type="checkbox" style="display:none" disabled>
+        <input id="receiveTranslate" type="checkbox" style="display:none" disabled>
+        <div class="settingLabel">对方的语言</div><select id="profileSource"><option value="AUTO">自动识别</option><option value="ZH">中文（简体）</option><option value="EN">英语</option><option value="IT">意大利语</option><option value="JA">日语</option><option value="KO">韩语</option></select>
+        <div class="settingLabel">自己的语言</div><select id="profileTarget"><option value="ZH">中文（简体）</option><option value="IT">意大利语</option><option value="EN">英语</option><option value="JA">日语</option><option value="KO">韩语</option></select>
+      </div>
+
+      <div class="modalDivider"></div>
+      <div class="settingLine"><span>独立代理 IP</span><label class="switch"><input id="useProxy" type="checkbox"><span></span></label></div>
+      <div id="proxyEditor" class="proxyEditor">
+        <div class="formRow"><label>代理类型<select id="proxyType"><option value="socks5">SOCKS5</option><option value="http">HTTP</option></select></label><label>代理主机<input id="host" autocomplete="off" placeholder="例如 127.0.0.1 或 proxy.example.com"></label></div>
+        <div class="formRow"><label>端口<input id="port" inputmode="numeric" autocomplete="off" placeholder="例如 1080"></label><label>用户名（可选）<input id="username" autocomplete="off" placeholder="用户名"></label></div>
+        <div class="formRow"><label>密码（可选）<input id="password" type="password" autocomplete="new-password" placeholder="密码"></label><div class="proxyButtons"><button type="button" id="testProxy" class="secondary">完整代理诊断</button><small id="proxyStatus"></small></div></div>
+        <label class="checkline"><input id="clearPassword" type="checkbox"> 清除已保存的代理密码</label><small id="passwordState"></small>
+      </div>
+
+      <div class="modalDivider"></div>
+      <div class="settingLine"><div><span>禁止中文</span><small>发送框含中文汉字时，Enter 和发送按钮都会被本地拦截。</small></div><label class="switch"><input id="blockChinese" type="checkbox"><span></span></label></div>
+      <div class="helper">中文检测只在本机完成，不会因为此功能上传聊天内容。</div>
+    </div>
+    <div class="accountModalFoot"><button type="button" id="cancelDlg" class="secondary">取消</button><button type="button" id="save">保存</button></div>
+  </section>
+</div>
+
+<div id="broadcastDlg" class="modalOverlay" aria-hidden="true">
+  <section class="accountModal broadcastModal" role="dialog" aria-modal="true" aria-labelledby="broadcastTitle">
+    <div class="accountModalHead"><div><p class="eyebrow">ACCOUNT BROADCAST ASSISTANT</p><h2 id="broadcastTitle">群发助手</h2></div><button type="button" id="closeBroadcast" class="iconClose">×</button></div>
+    <div class="accountModalBody">
+      <div class="broadcastAccount"><span>当前账号</span><b id="broadcastAccountName">未选择</b></div>
+      <div class="contactPickerHead"><div><b>从当前账号已有聊天中选择</b><span>支持联系人和群组，可单选或全选。只读取当前账号已经存在的聊天。</span></div><button type="button" id="refreshBroadcastContacts" class="secondary">刷新列表</button></div>
+      <div class="broadcastFilterBar">
+        <button type="button" class="filterPill active" data-broadcast-filter="all">全部</button>
+        <button type="button" class="filterPill" data-broadcast-filter="contact">联系人</button>
+        <button type="button" class="filterPill" data-broadcast-filter="group">群组</button>
+        <button type="button" id="broadcastSelectVisible" class="secondary miniBtn">全选当前</button>
+        <button type="button" id="broadcastSelectContacts" class="secondary miniBtn">全选联系人</button>
+        <button type="button" id="broadcastSelectGroups" class="secondary miniBtn">全选群组</button>
+      </div>
+      <input id="broadcastSearch" class="contactSearch" placeholder="搜索联系人或群组名称…">
+      <div id="broadcastContactList" class="contactPicker"><div class="contactPickerEmpty">打开 WhatsApp 并完成登录后，点击“刷新列表”。</div></div>
+      <div class="contactPickerMeta"><span id="broadcastSelectedCount">已选择 0 个聊天</span><button type="button" id="broadcastSelectNone" class="textBtn">清空选择</button></div>
+      <label>发送内容<textarea id="broadcastMessage" placeholder="输入要发送的文字。开启“禁止中文”的账号不能群发含中文消息。"></textarea></label>
+      <div class="broadcastMediaRow"><button type="button" id="broadcastPickImage" class="secondary">选择图片</button><span id="broadcastImageName">未选择图片</span><button type="button" id="broadcastClearImage" class="textBtn">清除图片</button></div>
+      <div class="formRow"><label>随机发送间隔<div class="intervalRange"><input id="broadcastIntervalMin" type="number" min="3" max="120" value="10"><span>至</span><input id="broadcastIntervalMax" type="number" min="3" max="180" value="20"><span>秒</span></div></label><div class="broadcastLimit"><b>安全限制</b><span>仅向当前账号已有聊天发送；建议使用已同意接收消息的联系人或群组。</span></div></div>
+      <label class="checkline consent"><input id="broadcastConsent" type="checkbox"> 我确认这些联系人已同意接收此类消息，并遵守 WhatsApp 的使用规则。</label>
+      <div id="broadcastStatus" class="broadcastStatus"></div>
+    </div>
+    <div class="accountModalFoot"><button type="button" id="cancelBroadcast" class="secondary">取消</button><button type="button" id="startBroadcast">开始群发</button></div>
+  </section>
+</div>
+
+<div id="noteDlg" class="modalOverlay" aria-hidden="true">
+  <section class="accountModal noteModal" role="dialog" aria-modal="true" aria-labelledby="noteTitle">
+    <div class="accountModalHead"><div><p class="eyebrow">LOCAL CHAT NOTE</p><h2 id="noteTitle">聊天备注</h2></div><button type="button" id="closeNote" class="iconClose">×</button></div>
+    <div class="accountModalBody">
+      <div class="noteTarget"><span>联系人 / 聊天</span><b id="noteChatName">未选择</b></div>
+      <label>备注内容<textarea id="noteText" maxlength="160" placeholder="例如：买票了，PBF赚27%，SCHW…"></textarea></label>
+      <div class="helper">备注保存在 Hello Mike 本机，并同步显示在 WhatsApp 左侧聊天列表的消息预览位置。关闭程序或重启电脑后仍会保留。</div>
+    </div>
+    <div class="accountModalFoot"><button type="button" id="clearNote" class="secondary dangerSoft">删除备注</button><span class="spacer"></span><button type="button" id="cancelNote" class="secondary">取消</button><button type="button" id="saveNote">保存备注</button></div>
+  </section>
+</div>
+<script src="whatsapp-adapter-host.js"></script>
+<script src="renderer.js"></script>
+<script src="updates-renderer.js"></script></body></html>
