@@ -1,0 +1,8 @@
+{
+  "enabled": false,
+  "provider": "generic",
+  "url": "",
+  "publisherNames": [],
+  "channel": "latest",
+  "checkOnStartup": false
+}
